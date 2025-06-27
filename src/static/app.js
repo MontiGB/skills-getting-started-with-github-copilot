@@ -20,11 +20,33 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const spotsLeft = details.max_participants - details.participants.length;
 
+        // --- Añadido: sección de participantes ---
+        let participantsHTML = "";
+        if (details.participants.length > 0) {
+          participantsHTML = `
+            <div class="participants-section">
+              <strong>Participantes:</strong>
+              <ul class="participants-list">
+                ${details.participants.map(p => `<li>${p}</li>`).join("")}
+              </ul>
+            </div>
+          `;
+        } else {
+          participantsHTML = `
+            <div class="participants-section">
+              <strong>Participantes:</strong>
+              <span class="no-participants">Nadie inscrito aún</span>
+            </div>
+          `;
+        }
+        // ----------------------------------------
+
         activityCard.innerHTML = `
           <h4>${name}</h4>
           <p>${details.description}</p>
           <p><strong>Schedule:</strong> ${details.schedule}</p>
           <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
+          ${participantsHTML}
         `;
 
         activitiesList.appendChild(activityCard);
@@ -83,4 +105,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize app
   fetchActivities();
+
+  // --- Añadido: estilos para la sección de participantes ---
+  const style = document.createElement("style");
+  style.textContent = `
+    .participants-section {
+      margin-top: 10px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      padding: 8px 12px;
+    }
+    .participants-list {
+      margin: 6px 0 0 18px;
+      padding: 0;
+      color: #333;
+    }
+    .participants-list li {
+      margin-bottom: 2px;
+      font-size: 0.97em;
+    }
+    .no-participants {
+      color: #888;
+      font-style: italic;
+      margin-left: 4px;
+    }
+  `;
+  document.head.appendChild(style);
+  // ---------------------------------------------------------
 });
